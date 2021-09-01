@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import *
 from tkinter import font
+import time
 
 FONT="Courier"
 WORK_TIME=25
@@ -14,7 +15,7 @@ window.title("Pomodoro")
 window.config(padx=50,pady=50,bg="YELLOW")
 
 title_label=Label(text="Timer",fg="GREEN",bg="YELLOW")
-
+window.iconbitmap('tomato.ico')
 title_label.grid(column=1,row=0)
 title_label.config(font=('Helvatical bold',40))
 
@@ -28,5 +29,9 @@ start.grid(column=0,row=3)
 
 reset=Button(text="reset")
 reset.grid(column=3,row=3)
+
+
+#countdown mechanism
+
 
 window.mainloop()
