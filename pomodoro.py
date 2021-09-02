@@ -3,30 +3,41 @@ from tkinter import *
 from tkinter import font
 import time
 import math
+import plyer
 
 FONT="Courier"
 START=5
 WORK_TIME=25
 SHORT_BREAK=5
 LONG_BREAK=10 
+global reps
+
+
 
 def reset():
-    start_timer()
+    canvas.itemconfig(timer_text,text=f"{00}:{00}")
+    reps=0
 
 def start_timer(flag):
-    
-    min=math.floor(flag/60)
-    sec=flag%60
+        min=math.floor(flag/60)
+        sec=flag%60
+        if(sec<10):
+            sec=f"0{sec}"
+            canvas.itemconfig(timer_text,text=f"{min}:{sec}")
+            window.after(1000,start_timer,flag-1)
 
+        if(flag<0):
+            plyer.notification.notify(title="Time for a break",message="Time is out did you finish your task?",app_name="Pomodoro Timer",app_icon="tomato.ico", timeout="5",toast=True) 
 
-    canvas.itemconfig(timer_text,text=f"{min}:{sec}")
-    if(flag>0):
-        window.after(1000,start_timer,flag-1)
-    
-        
- 
 def countdown():
-    start_timer(5*60)
+    reps=0
+    while(reps<5):
+        start_timer(START)
+        time.sleep(1)
+        start_timer(WORK_TIME)
+        time.sleep(1)
+        start_timer(SHORT_BREAK)
+        reps+=1
 
 window=Tk()
 
@@ -51,11 +62,9 @@ canvas.grid(column=1,row=2)
 start=Button(text="Start",command=countdown)
 start.grid(column=0,row=3)
 
-reset=Button(text="reset")
+reset=Button(text="reset",command=reset)
 reset.grid(column=3,row=3)
 
-
-#countdown mechanism
 
          
 
