@@ -2,7 +2,6 @@
 import tkinter
 from tkinter import *
 from tkinter import font
-import time
 import math
 import plyer
 
@@ -12,15 +11,21 @@ WORK_TIME=25
 SHORT_BREAK=5
 LONG_BREAK=10 
 reps=0
+timer=0
 
 def reset():
-    canvas.itemconfig(timer_text,text=f"{00}:{00}")
-    pass
+    window.after_cancel(timer)
+    canvas.itemconfig(timer_text,text="00:00")
+    title_label.config(text="Timer")
+    
 
 def start_timer(flag):
+        global timer
         min=math.floor(flag/60)
         sec=flag%60
-        canvas.itemconfig(timer_text,text=f"{min}:{sec}")
+        if(sec<10):
+            sec=f"{0}{sec}"
+        timer=canvas.itemconfig(timer_text,text=f"{min}:{sec}")
         
         window.after(1000,start_timer,flag-1)
         if(flag==0):
@@ -37,20 +42,14 @@ def countdown():
     if(reps%8==0):
         start_timer(long_sec)
         title_label.config(text="Long Break",fg="GREEN")
-        
     elif(reps%2==0):
         start_timer(short_sec)
-        title_label.config(text="Work",fg="RED")
+        title_label.config(text="Break",fg="GREEN")
     else:
         start_timer(work_sec)
         title_label.config(text="WORK",fg="RED")
 
 
-
-
-
-       
-       
 
 
 window=Tk()
