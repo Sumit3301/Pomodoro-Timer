@@ -1,3 +1,4 @@
+
 import tkinter
 from tkinter import *
 from tkinter import font
@@ -10,36 +11,50 @@ START=5
 WORK_TIME=25
 SHORT_BREAK=5
 LONG_BREAK=10 
-global reps
-
-
+reps=0
 
 def reset():
     canvas.itemconfig(timer_text,text=f"{00}:{00}")
-    reps=0
+    pass
 
 def start_timer(flag):
         min=math.floor(flag/60)
         sec=flag%60
-        if(sec<10):
-            sec=f"0{sec}"
-            canvas.itemconfig(timer_text,text=f"{min}:{sec}")
-            window.after(1000,start_timer,flag-1)
-
-        if(flag<0):
-            plyer.notification.notify(title="Time for a break",message="Time is out did you finish your task?",app_name="Pomodoro Timer",app_icon="tomato.ico", timeout="5",toast=True) 
-
+        canvas.itemconfig(timer_text,text=f"{min}:{sec}")
+        
+        window.after(1000,start_timer,flag-1)
+        if(flag==0):
+            plyer.notification.notify(title="Time for a break",message="Time is out did you finish your task?",app_name="Pomodoro Timer",app_icon="tomato.ico", timeout="5",toast=True)
+            countdown()
+        
 def countdown():
-    reps=0
-    while(reps<5):
-        start_timer(START)
-        time.sleep(1)
-        start_timer(WORK_TIME)
-        time.sleep(1)
-        start_timer(SHORT_BREAK)
-        reps+=1
+    global reps
+    reps=reps+1
+
+    work_sec=WORK_TIME*60
+    short_sec=SHORT_BREAK*60
+    long_sec=LONG_BREAK*60
+    if(reps%8==0):
+        start_timer(long_sec)
+        title_label.config(text="Long Break",fg="GREEN")
+        
+    elif(reps%2==0):
+        start_timer(short_sec)
+        title_label.config(text="Work",fg="RED")
+    else:
+        start_timer(work_sec)
+        title_label.config(text="WORK",fg="RED")
+
+
+
+
+
+       
+       
+
 
 window=Tk()
+
 
 window.title("Pomodoro")
 window.config(padx=50,pady=50,bg="YELLOW")
